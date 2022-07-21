@@ -34,6 +34,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "storybook-debug": "start-storybook -p 9009 -s public --no-dll",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",
     "jest:integration": "jest -c integration/jest.config.js",
@@ -64,6 +65,6 @@
     "jest-image-snapshot": "^4.0.2",
     "jest-puppeteer": "^4.4.0",
     "puppeteer": "^5.1.0",
-    "start-server-and-test": "^1.11.2"
+    "start-server-anyarnd-test": "^1.11.2"
   }
 }
