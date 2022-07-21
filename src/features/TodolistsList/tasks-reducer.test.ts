@@ -140,7 +140,7 @@ test('empty arrays should be added when we set todolists', () => {
 test('tasks should be added for todolist', () => {
     const action = fetchTasksTC.fulfilled(
         {tasks: startState["todolistId1"], todolistId: "todolistId1"},
-        "",
+        "requestId",
         "todolistId1");
 
     const endState = tasksReducer({
