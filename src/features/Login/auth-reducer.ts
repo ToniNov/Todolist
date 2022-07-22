@@ -24,8 +24,7 @@ export const loginTC =
                 return thunkAPI.rejectWithValue({errors: res.data.messages, fieldsErrors: res.data.fieldsErrors});
             }
         } catch (err) {
-            // @ts-ignore
-            const error: AxiosError = err
+            const error = err as AxiosError
             handleServerNetworkError(error, thunkAPI.dispatch)
             return  thunkAPI.rejectWithValue({errors:[error.message], fieldsErrors: undefined});
         }

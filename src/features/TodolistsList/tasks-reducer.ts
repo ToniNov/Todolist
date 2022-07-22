@@ -5,6 +5,7 @@ import {AppRootStateType} from '../../app/store'
 import {setAppStatusAC} from '../../app/app-reducer'
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils'
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {AxiosError} from "axios";
 
 const initialState: TasksStateType = {}
 
@@ -23,45 +24,25 @@ export const removeTaskTC =
         return {taskId: param.taskId, todolistId: param.todolistId};
     });
 
-// !!!!!!!! Finish refactoring
-export const addTaskTC =
-    createAsyncThunk('tasks/addTask', (param: {title: string, todolistId: string}, thunkAPI) => {
-        thunkAPI.dispatch(setAppStatusAC({status:'loading'}))
-        todolistsAPI.createTask(param.todolistId, param.title)
-            .then(res => {
-                if (res.data.resultCode === 0) {
-                    const task = res.data.data.item
-                    const action = addTaskAC(task)
-                    thunkAPI.dispatch(action)
-                    thunkAPI.dispatch(setAppStatusAC({status:'succeeded'}))
-                } else {
-                    handleServerAppError(res.data, thunkAPI.dispatch);
-                }
-            })
-            .catch((error) => {
-                handleServerNetworkError(error, thunkAPI.dispatch)
-            })
-    });
 
-export const addTaskTC_ = (title: string, todolistId: string) => (dispatch: Dispatch) => {
-    dispatch(setAppStatusAC({status:'loading'}))
-    todolistsAPI.createTask(todolistId, title)
-        .then(res => {
+export const addTaskTC =
+    createAsyncThunk('tasks/addTask', async (param: { title: string, todolistId: string }, thunkAPI) => {
+        thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
+        try {
+            const res = await todolistsAPI.createTask(param.todolistId, param.title);
             if (res.data.resultCode === 0) {
                 const task = res.data.data.item
                 const action = addTaskAC(task)
-                dispatch(action)
-                dispatch(setAppStatusAC({status:'succeeded'}))
+                thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
+                thunkAPI.dispatch(action)
             } else {
-                handleServerAppError(res.data, dispatch);
+                handleServerAppError(res.data, thunkAPI.dispatch);
             }
-        })
-        .catch((error) => {
-            handleServerNetworkError(error, dispatch)
-        })
-}
-
-
+        } catch (err) {
+            const error = err  as AxiosError
+            handleServerNetworkError(error,thunkAPI.dispatch)
+        }
+    });
 
 const slice = createSlice({
     name: 'tasks',
