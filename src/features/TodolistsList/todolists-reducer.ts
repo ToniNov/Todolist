@@ -58,6 +58,7 @@ export const fetchTodolistsTC = () => {
             })
     }
 }
+
 export const removeTodolistTC = (todolistId: string) => {
     return (dispatch: Dispatch) => {
         //изменим глобальный статус приложения, чтобы вверху полоса побежала
@@ -72,6 +73,7 @@ export const removeTodolistTC = (todolistId: string) => {
             })
     }
 }
+
 export const addTodolistTC = (title: string) => {
     return (dispatch: Dispatch) => {
         dispatch(setAppStatusAC({status: 'loading'}))
@@ -82,6 +84,7 @@ export const addTodolistTC = (title: string) => {
             })
     }
 }
+
 export const changeTodolistTitleTC = (id: string, title: string) => {
     return (dispatch: Dispatch) => {
         todolistsAPI.updateTodolist(id, title)
