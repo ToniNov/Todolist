@@ -14,23 +14,23 @@ import {Menu} from '@material-ui/icons'
 import {TodolistsList} from '../features/TodolistsList/TodolistsList'
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar'
 import {useDispatch, useSelector} from 'react-redux'
-import {AppRootStateType} from './store'
-import {initializeAppTC, RequestStatusType} from './app-reducer'
+import {initializeAppTC} from './app-reducer'
 import {Route} from 'react-router-dom'
-import {Login} from '../features/Login/Login'
-import {logoutTC} from '../features/Login/auth-reducer'
+import {Login} from '../features/Auth/Login'
+import {logoutTC} from '../features/Auth/auth-reducer'
+import {authSelectors} from "../features/Auth";
+import {appSelectors} from "./index";
 
 type PropsType = {
     demo?: boolean
 }
 
 function App({demo = false}: PropsType) {
-    const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status)
-    const isInitialized = useSelector<AppRootStateType, boolean>((state) => state.app.isInitialized)
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+    const status = useSelector(appSelectors.selectStatus)
+    const isInitialized = useSelector(appSelectors.selectIsInitialized)
+    const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn)
     const dispatch = useDispatch()
 
-    // Для работы с тестами
     useEffect(() => {
         if (!demo) {
             dispatch(initializeAppTC())

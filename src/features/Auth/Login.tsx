@@ -3,8 +3,9 @@ import {Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, G
 import {FormikHelpers, useFormik} from 'formik'
 import {useSelector} from 'react-redux'
 import {loginTC} from './auth-reducer'
-import {AppRootStateType, useAppDispatch} from '../../app/store'
+import {useAppDispatch} from '../../app/store'
 import {Redirect} from 'react-router-dom'
+import {selectIsLoggedIn} from "./selectors";
 
 type FormValuesType = {
     email: string
@@ -15,7 +16,7 @@ type FormValuesType = {
 export const Login = () => {
     const dispatch = useAppDispatch()
 
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn);
+    const isLoggedIn = useSelector(selectIsLoggedIn);
 
     const formik = useFormik({
         validate: (values) => {
@@ -36,10 +37,10 @@ export const Login = () => {
             password: '',
             rememberMe: false
         },
-        onSubmit: async (values:FormValuesType, formikHelpers:FormikHelpers<FormValuesType>) => {
+        onSubmit: async (values: FormValuesType, formikHelpers: FormikHelpers<FormValuesType>) => {
             const action = await dispatch(loginTC(values));
 
-            if (loginTC.rejected.match(action)){
+            if (loginTC.rejected.match(action)) {
                 if (action.payload?.fieldsErrors?.length) {
                     const error = action.payload?.fieldsErrors[0];
                     formikHelpers.setFieldError(error.field, error.error)
@@ -49,7 +50,7 @@ export const Login = () => {
     })
 
     if (isLoggedIn) {
-        return <Redirect to={"/"} />
+        return <Redirect to={"/"}/>
     }
 
 
