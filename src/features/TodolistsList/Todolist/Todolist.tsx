@@ -12,9 +12,6 @@ import {tasksActions, todolistsActions} from "../index";
 type PropsType = {
     todolist: TodolistDomainType
     tasks: Array<TaskType>
-    changeTaskStatus: (id: string, status: TaskStatuses, todolistId: string) => void
-    changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
-    removeTask: (params: { taskId: string, todolistId: string }) => void
     demo?: boolean
 }
 
@@ -22,13 +19,21 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
     console.log('Todolist called')
 
     const {changeTodolistFilter, removeTodolist, changeTodolistTitle} = useActions(todolistsActions)
-    const {addTask, fetchTasks} = useActions(tasksActions)
+    const {addTask, fetchTasks, updateTask, removeTask} = useActions(tasksActions)
 
     useEffect(() => {
         if (demo) {
             return
         }
         fetchTasks(props.todolist.id)
+    }, [])
+
+    const changeTaskStatus = useCallback(function (id: string, status: TaskStatuses, todolistId: string) {
+        updateTask({taskId: id, model: {status}, todolistId})
+    }, [])
+
+    const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
+        updateTask({taskId: id, model: {title: newTitle}, todolistId})
     }, [])
 
     const addTaskCallback = useCallback((title: string) => {
@@ -69,9 +74,9 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
         <div>
             {
                 tasksForTodolist.map(t => <Task key={t.id} task={t} todolistId={props.todolist.id}
-                                                removeTask={props.removeTask}
-                                                changeTaskTitle={props.changeTaskTitle}
-                                                changeTaskStatus={props.changeTaskStatus}
+                                                removeTask={removeTask}
+                                                changeTaskTitle={changeTaskTitle}
+                                                changeTaskStatus={changeTaskStatus}
                 />)
             }
         </div>
