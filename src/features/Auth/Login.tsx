@@ -2,12 +2,11 @@ import React from 'react'
 import {Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField} from '@material-ui/core'
 import {FormikHelpers, useFormik} from 'formik'
 import {useSelector} from 'react-redux'
-import {useAppDispatch} from '../../app/store'
+import {login} from './auth-reducer'
 import {Redirect} from 'react-router-dom'
-import {selectIsLoggedIn} from "./selectors";
-import {authActions} from "./index";
-import {login} from "./auth-reducer";
-
+import {selectIsLoggedIn} from './selectors'
+import {authActions} from './index'
+import {useAppDispatch} from "../../app/store";
 
 type FormValuesType = {
     email: string
@@ -40,19 +39,19 @@ export const Login = () => {
             rememberMe: false
         },
         onSubmit: async (values: FormValuesType, formikHelpers: FormikHelpers<FormValuesType>) => {
-            const action = await dispatch(authActions.login(values)) ;
+            const resultAction = await dispatch(authActions.login(values));
 
-            if (login.rejected.match(action)) {
-                if (action.payload?.fieldsErrors?.length) {
-                    const error = action.payload?.fieldsErrors[0];
-                    formikHelpers.setFieldError(error.field, error.error)
+            if  (login.rejected.match(resultAction)) {
+                if (resultAction.payload?.fieldsErrors?.length) {
+                    const error = resultAction.payload?.fieldsErrors[0];
+                    formikHelpers.setFieldError(error.field, error.error);
                 }
             }
         },
     })
 
     if (isLoggedIn) {
-        return <Redirect to={"/"}/>
+        return <Redirect to={"/"} />
     }
 
 
