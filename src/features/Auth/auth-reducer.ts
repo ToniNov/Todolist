@@ -1,4 +1,4 @@
-import {setAppStatusAC} from '../../app/app-reducer'
+import {setAppStatusAC} from '../Application/application-reducer'
 import {authAPI, FieldErrorType, LoginParamsType} from '../../api/todolists-api'
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils'
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
@@ -55,7 +55,7 @@ export const slice = createSlice({
         isLoggedIn: false
     },
     reducers: {
-        setIsLoggedInAC(state, action: PayloadAction<{ value: boolean }>) {
+        setIsLoggedIn(state, action: PayloadAction<{ value: boolean }>) {
             state.isLoggedIn = action.payload.value;
         }
     },
@@ -70,4 +70,4 @@ export const slice = createSlice({
 });
 
 export const authReducer = slice.reducer;
-export const {setIsLoggedInAC} = slice.actions;
+export const {setIsLoggedIn} = slice.actions;

@@ -12,14 +12,14 @@ import {
 } from '@material-ui/core'
 import {Menu} from '@material-ui/icons'
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar'
-import {useDispatch, useSelector} from 'react-redux'
-import {asyncActions, initializeApp} from './app-reducer'
+import { useSelector} from 'react-redux'
 import {Route} from 'react-router-dom'
-import {Login} from '../features/Auth'
-import {logout} from '../features/Auth/auth-reducer'
+import {authActions, Login} from '../features/Auth'
 import {authSelectors} from "../features/Auth";
-import {appSelectors} from "./index";
+import {appActions, appSelectors} from "../features/Application";
 import {TodolistsList} from "../features/TodolistsList";
+import {selectIsInitialized} from "../features/Application/selectors";
+import {useActions} from "./store";
 
 type PropsType = {
     demo?: boolean
@@ -27,22 +27,20 @@ type PropsType = {
 
 function App({demo = false}: PropsType) {
     const status = useSelector(appSelectors.selectStatus)
-    const isInitialized = useSelector(appSelectors.selectIsInitialized)
+    const isInitialized = useSelector(selectIsInitialized)
     const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn)
-    const dispatch = useDispatch()
+
+    const {logout} = useActions(authActions)
+    const {initializeApp} = useActions(appActions)
 
     useEffect(() => {
         if (!demo) {
-           asyncActions.initializeApp()
+           initializeApp()
         }
     }, [])
 
-    useEffect(() => {
-        asyncActions.initializeApp()
-    }, [])
-
     const logoutHandler = useCallback(() => {
-        dispatch(logout())
+      logout()
     }, [])
 
     if (!isInitialized) {
