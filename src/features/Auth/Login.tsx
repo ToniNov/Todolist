@@ -2,10 +2,12 @@ import React from 'react'
 import {Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField} from '@material-ui/core'
 import {FormikHelpers, useFormik} from 'formik'
 import {useSelector} from 'react-redux'
-import {loginTC} from './auth-reducer'
 import {useAppDispatch} from '../../app/store'
 import {Redirect} from 'react-router-dom'
 import {selectIsLoggedIn} from "./selectors";
+import {authActions} from "./index";
+import {login} from "./auth-reducer";
+
 
 type FormValuesType = {
     email: string
@@ -38,9 +40,9 @@ export const Login = () => {
             rememberMe: false
         },
         onSubmit: async (values: FormValuesType, formikHelpers: FormikHelpers<FormValuesType>) => {
-            const action = await dispatch(loginTC(values));
+            const action = await dispatch(authActions.login(values)) ;
 
-            if (loginTC.rejected.match(action)) {
+            if (login.rejected.match(action)) {
                 if (action.payload?.fieldsErrors?.length) {
                     const error = action.payload?.fieldsErrors[0];
                     formikHelpers.setFieldError(error.field, error.error)
