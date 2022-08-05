@@ -28,14 +28,6 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
         fetchTasks(props.todolist.id)
     }, [])
 
-    const changeTaskStatus = useCallback(function (id: string, status: TaskStatuses, todolistId: string) {
-        updateTask({taskId: id, model: {status}, todolistId})
-    }, [])
-
-    const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
-        updateTask({taskId: id, model: {title: newTitle}, todolistId})
-    }, [])
-
     const addTaskCallback = useCallback((title: string) => {
         addTask({title: title, todolistId: props.todolist.id})
     }, [props.todolist.id])
@@ -81,11 +73,7 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
         <AddItemForm addItem={addTaskCallback} disabled={props.todolist.entityStatus === 'loading'}/>
         <div>
             {
-                tasksForTodolist.map(t => <Task key={t.id} task={t} todolistId={props.todolist.id}
-                                                removeTask={removeTask}
-                                                changeTaskTitle={changeTaskTitle}
-                                                changeTaskStatus={changeTaskStatus}
-                />)
+                tasksForTodolist.map(t => <Task key={t.id} task={t} todolistId={props.todolist.id}/>)
             }
         </div>
         <div style={{paddingTop: '10px'}}>
