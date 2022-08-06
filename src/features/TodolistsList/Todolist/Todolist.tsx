@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect} from 'react'
 import {AddItemForm} from '../../../components/AddItemForm/AddItemForm'
 import {EditableSpan} from '../../../components/EditableSpan/EditableSpan'
-import {Button, IconButton, PropTypes} from '@material-ui/core'
+import {Button, IconButton, Paper, PropTypes} from '@material-ui/core'
 import {Delete} from '@material-ui/icons'
 import {Task} from './Task/Task'
 import {TaskStatuses, TaskType} from '../../../api/todolists-api'
@@ -64,11 +64,15 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
         )
     }
 
-    return <div>
-        <h3><EditableSpan value={props.todolist.title} onChange={changeTodolistTitleCallback}/>
-            <IconButton onClick={removeTodolistCallback} disabled={props.todolist.entityStatus === 'loading'}>
-                <Delete/>
-            </IconButton>
+    return <Paper style={{padding: "10px", position: "relative"}}>
+        <IconButton onClick={removeTodolistCallback}
+                    disabled={props.todolist.entityStatus === 'loading'}
+                    style={{position: "absolute", right: "5px",top: "5"}}
+        >
+            <Delete/>
+        </IconButton>
+        <h3>
+            <EditableSpan value={props.todolist.title} onChange={changeTodolistTitleCallback}/>
         </h3>
         <AddItemForm addItem={addTaskCallback} disabled={props.todolist.entityStatus === 'loading'}/>
         <div>
@@ -81,7 +85,7 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
             {renderFilterButton( 'active','primary',"Active")}
             {renderFilterButton( 'completed','secondary',"Completed")}
         </div>
-    </div>
+    </Paper>
 })
 
 
