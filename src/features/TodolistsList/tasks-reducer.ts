@@ -1,4 +1,11 @@
-import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType} from '../../api/todolists-api'
+import {
+    FieldErrorType,
+    TaskPriorities,
+    TaskStatuses,
+    TaskType,
+    todolistsAPI,
+    UpdateTaskModelType
+} from '../../api/todolists-api'
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {setAppStatusAC} from "../Application/application-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
@@ -22,7 +29,10 @@ const removeTask =
     });
 
 const addTask =
-    createAsyncThunk('tasks/addTask', async (param: { title: string, todolistId: string }, {
+    createAsyncThunk<TaskType,
+        { title: string, todolistId: string },
+        { rejectValue: { errors: string[], fieldsErrors?: FieldErrorType[] } }>
+    ('tasks/addTask', async (param: { title: string, todolistId: string }, {
         dispatch,
         rejectWithValue
     }) => {
@@ -33,13 +43,13 @@ const addTask =
                 dispatch(setAppStatusAC({status: 'succeeded'}));
                 return res.data.data.item;
             } else {
-                handleServerAppError(res.data, dispatch);
-                return rejectWithValue(null);
+                handleServerAppError(res.data, dispatch, false);
+                return rejectWithValue({errors: res.data.messages, fieldsErrors: res.data.fieldsErrors});
             }
         } catch (err) {
-            const error = err as AxiosError
-            handleServerNetworkError(error, dispatch);
-            return rejectWithValue(null);
+            const error = err as AxiosError;
+            handleServerNetworkError(error, dispatch, false);
+            return rejectWithValue({errors: [error.message], fieldsErrors: undefined});
         }
     });
 
@@ -73,7 +83,7 @@ const updateTask =
                 }
             } catch (err) {
                 const error = err as AxiosError
-                handleServerNetworkError(error, dispatch);
+                handleServerNetworkError(error, dispatch, false);
                 return rejectWithValue(null);
             }
         });

@@ -6,8 +6,10 @@ import {Delete} from '@material-ui/icons'
 import {Task} from './Task/Task'
 import {TaskStatuses, TaskType} from '../../../api/todolists-api'
 import {FilterValuesType, TodolistDomainType} from '../todolists-reducer'
-import {useActions} from "../../../app/store";
+import {useActions, useAppDispatch} from "../../../app/store";
 import {tasksActions, todolistsActions} from "../index";
+import {login} from "../../Auth/auth-reducer";
+import {throws} from "assert";
 
 type PropsType = {
     todolist: TodolistDomainType
@@ -16,10 +18,12 @@ type PropsType = {
 }
 
 export const Todolist = React.memo(function ({demo = false, ...props}: PropsType) {
-    console.log('Todolist called')
 
     const {changeTodolistFilter, removeTodolist, changeTodolistTitle} = useActions(todolistsActions)
     const {addTask, fetchTasks, updateTask, removeTask} = useActions(tasksActions)
+
+    const dispatch = useAppDispatch();
+
 
     useEffect(() => {
         if (demo) {
@@ -28,8 +32,18 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
         fetchTasks(props.todolist.id)
     }, [])
 
-    const addTaskCallback = useCallback((title: string) => {
-        addTask({title: title, todolistId: props.todolist.id})
+    const addTaskCallback = useCallback(async (title: string) => {
+        let thunk = tasksActions.addTask({title: title, todolistId: props.todolist.id})
+        const resultAction = await dispatch(thunk);
+
+        if (tasksActions.addTask.rejected.match(resultAction)) {
+            if (resultAction.payload?.errors?.length) {
+                const errorMessage = resultAction.payload?.errors[0];
+                throw new Error(errorMessage);
+            } else {
+                throw new Error("Some error occurred")
+            }
+        }
     }, [props.todolist.id])
 
     const removeTodolistCallback = () => {
