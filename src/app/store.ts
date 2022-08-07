@@ -8,6 +8,7 @@ import {configureStore} from "@reduxjs/toolkit";
 import {useDispatch} from "react-redux";
 
 import {useMemo} from "react";
+import {FieldErrorType} from "../api/todolists-api";
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
@@ -37,6 +38,8 @@ export function useActions<T extends ActionCreatorsMapObject<any>>(actions: T) {
 
     return boundActions
 }
+
+export type ThunkError = { rejectValue: { errors: string[], fieldsErrors?: FieldErrorType[]}}
 
 // а это, чтобы можно было в консоли браузера обращаться к store в любой момент
 // @ts-ignore

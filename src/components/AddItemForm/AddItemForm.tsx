@@ -2,8 +2,10 @@ import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {IconButton, TextField} from '@material-ui/core';
 import {AddBox} from '@material-ui/icons';
 
+export type AddItemFormSubmitHelperType = { setError: (error: string) => void, setTitle: (title: string) => void}
+
 type AddItemFormPropsType = {
-    addItem: (title: string) => Promise<any>
+    addItem: (title: string, helper: AddItemFormSubmitHelperType) => Promise<any>
     disabled?: boolean
 }
 
@@ -15,7 +17,7 @@ export const AddItemForm = React.memo(function ({addItem, disabled = false}: Add
     const addItemHandler = async () => {
         if (title.trim() !== "") {
             try {
-                await addItem(title);
+                await addItem(title,{setError,setTitle});
                 setTitle("");
             } catch (error) {
                 // @ts-ignore

@@ -1,7 +1,7 @@
 import {authAPI} from '../../api/todolists-api'
 import {setIsLoggedIn} from '../Auth/auth-reducer'
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-
+import {appActions} from '../CommonActions/App'
 
 export const initializeApp =
     createAsyncThunk('app/initializeApp', async (param, {dispatch}) => {
@@ -12,6 +12,7 @@ export const initializeApp =
 
     }
 })
+
 export const asyncActions = {initializeApp}
 
 export const slice = createSlice({
@@ -21,24 +22,20 @@ export const slice = createSlice({
         error: null,
         isInitialized: false
     } as InitialStateType,
-    reducers: {
-        setAppStatusAC(state, action: PayloadAction<{ status: RequestStatusType }>) {
-            state.status = action.payload.status
-        },
-        setAppErrorAC(state, action: PayloadAction<{ error: string | null }>) {
-            state.error = action.payload.error
-        },
-    },
+    reducers: {},
     extraReducers: builder => {
-        builder.addCase(initializeApp.fulfilled, (state, action)=> {
-            state.isInitialized = true;
-        })
+        builder
+            .addCase(initializeApp.fulfilled, (state, action) => {
+                state.isInitialized = true
+            })
+            .addCase(appActions.setAppStatus, (state, action) => {
+                state.status = action.payload.status
+            })
+            .addCase(appActions.setAppError, (state, action) => {
+                state.error = action.payload.error
+            })
     }
 });
-
-export const applicationReducer = slice.reducer
-
-export const {setAppErrorAC, setAppStatusAC} = slice.actions;
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
@@ -51,7 +48,5 @@ export type InitialStateType = {
     isInitialized: boolean
 }
 
-export type SetAppErrorActionType = ReturnType<typeof setAppErrorAC>
-export type SetAppStatusActionType = ReturnType<typeof setAppStatusAC>
 
 

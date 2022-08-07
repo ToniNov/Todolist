@@ -10,7 +10,7 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {setAppStatusAC} from "../Application/application-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {AxiosError} from "axios";
-import {AppRootStateType} from "../../app/store";
+import {AppRootStateType, ThunkError} from "../../app/store";
 import {asyncActions as asyncTodolistsActions} from "./todolists-reducer";
 
 const fetchTasks =
@@ -28,27 +28,20 @@ const removeTask =
         return {taskId: param.taskId, todolistId: param.todolistId};
     });
 
-const addTask =
-    createAsyncThunk<TaskType,
-        { title: string, todolistId: string },
-        { rejectValue: { errors: string[], fieldsErrors?: FieldErrorType[] } }>
-    ('tasks/addTask', async (param: { title: string, todolistId: string }, {
-        dispatch,
-        rejectWithValue
-    }) => {
-        dispatch(setAppStatusAC({status: 'loading'}));
+const addTask = createAsyncThunk<TaskType,{ title: string, todolistId: string },ThunkError>
+    ('tasks/addTask', async (param, thunkAPI) => {
+        thunkAPI.dispatch(setAppStatusAC({status: 'loading'}));
         try {
             const res = await todolistsAPI.createTask(param.todolistId, param.title);
             if (res.data.resultCode === 0) {
-                dispatch(setAppStatusAC({status: 'succeeded'}));
+                thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}));
                 return res.data.data.item;
             } else {
-                handleServerAppError(res.data, dispatch, false);
-                return rejectWithValue({errors: res.data.messages, fieldsErrors: res.data.fieldsErrors});
+                handleServerAppError(res.data, thunkAPI.dispatch, false);
+                return thunkAPI.rejectWithValue({errors: res.data.messages, fieldsErrors: res.data.fieldsErrors});
             }
-        } catch (err) {
-            const error = err as AxiosError;
-            handleServerNetworkError(error, dispatch, false);
+        } catch (error) {
+            handleServerNetworkError(error, thunkAPI.dispatch, false);
             return rejectWithValue({errors: [error.message], fieldsErrors: undefined});
         }
     });
