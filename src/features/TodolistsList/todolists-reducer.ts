@@ -8,7 +8,8 @@ import {appActions} from "../CommonActions/App";
 const {setAppStatus} = appActions
 
 const fetchTodolists =
-    createAsyncThunk('todolists/fetchTodolists', async (param,thunkAPI) => {
+    createAsyncThunk<{ todolists: TodolistType[] }, undefined, ThunkError>
+    ('todolists/fetchTodolists', async (param,thunkAPI) => {
         thunkAPI.dispatch(setAppStatus({status: 'loading'}));
         const res = await todolistsAPI.getTodolists();
         try {
