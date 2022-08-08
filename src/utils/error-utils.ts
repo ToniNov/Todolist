@@ -1,13 +1,13 @@
-import {ResponseType} from '../api/todolists-api'
 import {AxiosError} from "axios";
 import {appActions} from '../features/CommonActions/App'
+import {ResponseTypeApi} from "../api/types";
 
 type ThunkAPIType = {
     dispatch: (action: any) => any
     rejectWithValue: Function
 }
 
-export const handleAsyncServerAppError = <D>(data: ResponseType<D>,
+export const handleAsyncServerAppError = <D>(data: ResponseTypeApi<D>,
                                              thunkAPI: ThunkAPIType,
                                              showError = true) => {
     if (showError) {

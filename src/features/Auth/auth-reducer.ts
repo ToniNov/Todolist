@@ -1,9 +1,10 @@
-import {authAPI, LoginParamsType} from '../../api/todolists-api'
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
-import {ThunkError} from "../../app/store";
 import {appActions} from "../CommonActions/App";
 import {handleAsyncServerAppError, handleAsyncServerNetworkError} from "../../utils/error-utils";
+import {ThunkError} from "../../utils/types";
+import { LoginParamsType } from "../../api/types";
+import {authAPI} from "../../api/todolists-api";
 
 export const login = createAsyncThunk<undefined, LoginParamsType, ThunkError>
 ('auth/login', async (param, thunkAPI) => {
@@ -12,7 +13,7 @@ export const login = createAsyncThunk<undefined, LoginParamsType, ThunkError>
         const res = await authAPI.login(param)
         if (res.data.resultCode === 0) {
             thunkAPI.dispatch(appActions.setAppStatus({status: 'succeeded'}))
-            return;
+            return
         } else {
             handleAsyncServerAppError(res.data, thunkAPI)
             return thunkAPI.rejectWithValue({errors: res.data.messages, fieldsErrors: res.data.fieldsErrors});

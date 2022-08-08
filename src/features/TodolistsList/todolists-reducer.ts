@@ -1,9 +1,10 @@
-import {todolistsAPI, TodolistType} from '../../api/todolists-api'
+import {todolistsAPI} from '../../api/todolists-api'
 import {RequestStatusType,} from '../Application/application-reducer'
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {handleAsyncServerAppError, handleAsyncServerNetworkError} from "../../utils/error-utils";
-import {ThunkError} from "../../app/store";
 import {appActions} from "../CommonActions/App";
+import { ThunkError } from '../../utils/types';
+import {TodolistType} from "../../api/types";
 
 const {setAppStatus} = appActions
 

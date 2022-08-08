@@ -6,7 +6,7 @@ import {login} from './auth-reducer'
 import {Redirect} from 'react-router-dom'
 import {selectIsLoggedIn} from './selectors'
 import {authActions} from './index'
-import {useAppDispatch} from "../../app/store";
+import {useAppDispatch} from '../../utils/redux-utils'
 
 type FormValuesType = {
     email: string
@@ -39,7 +39,7 @@ export const Login = () => {
             rememberMe: false
         },
         onSubmit: async (values: FormValuesType, formikHelpers: FormikHelpers<FormValuesType>) => {
-            const resultAction = await dispatch(authActions.login(values));
+            const resultAction: any = await dispatch(authActions.login(values));
 
             if  (login.rejected.match(resultAction)) {
                 if (resultAction.payload?.fieldsErrors?.length) {

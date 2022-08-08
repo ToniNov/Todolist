@@ -19,7 +19,7 @@ import {authSelectors} from "../features/Auth";
 import {appActions, appSelectors} from "../features/Application";
 import {TodolistsList} from "../features/TodolistsList";
 import {selectIsInitialized} from "../features/Application/selectors";
-import {useActions} from "./store";
+import {useActions} from "../utils/redux-utils";
 
 type PropsType = {
     demo?: boolean

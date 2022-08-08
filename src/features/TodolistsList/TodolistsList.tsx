@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect} from 'react'
 import {useSelector} from 'react-redux'
-import {AppRootStateType, useActions, useAppDispatch} from '../../app/store'
 import {TodolistDomainType} from './todolists-reducer'
 import {TasksStateType} from './tasks-reducer'
 import {Grid} from '@material-ui/core'
@@ -9,6 +8,8 @@ import {Todolist} from './Todolist/Todolist'
 import {Redirect} from 'react-router-dom'
 import {selectIsLoggedIn} from "../Auth/selectors";
 import {todolistsActions} from "./index";
+import {AppRootStateType} from "../../utils/types";
+import {useActions, useAppDispatch} from "../../utils/redux-utils";
 
 type PropsType = {
     demo?: boolean
