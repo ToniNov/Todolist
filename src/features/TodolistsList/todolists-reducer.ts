@@ -21,7 +21,7 @@ export const fetchTodolists = createAsyncThunk<{ todolists: TodolistType[] }, un
 })
 
 export const removeTodolist =
-    createAsyncThunk('todolists/removeTodolist', async (todolistId: string, {dispatch}) => {
+    createAsyncThunk<{id:string}, string, ThunkError>('todolists/removeTodolist', async (todolistId, {dispatch}) => {
         dispatch(setAppStatus({status: 'loading'}));
         dispatch(changeTodolistEntityStatus({id: todolistId, status: 'loading'}));
         const res = await todolistsAPI.deleteTodolist(todolistId);

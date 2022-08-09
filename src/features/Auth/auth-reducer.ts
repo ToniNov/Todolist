@@ -3,7 +3,7 @@ import {AxiosError} from "axios";
 import {appActions} from "../CommonActions/App";
 import {handleAsyncServerAppError, handleAsyncServerNetworkError} from "../../utils/error-utils";
 import {ThunkError} from "../../utils/types";
-import { LoginParamsType } from "../../api/types";
+import {LoginParamsType} from "../../api/types";
 import {authAPI} from "../../api/todolists-api";
 
 export const login = createAsyncThunk<undefined, LoginParamsType, ThunkError>
@@ -40,9 +40,9 @@ export const logout
     } catch (err) {
         const error = err as AxiosError
         handleAsyncServerNetworkError(error, thunkAPI)
-        return thunkAPI.rejectWithValue({})
+        return thunkAPI.rejectWithValue({});
     }
-})
+});
 
 export const asyncActions = {login, logout}
 

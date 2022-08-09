@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core'
 import {Menu} from '@material-ui/icons'
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar'
-import { useSelector} from 'react-redux'
+import {useSelector} from 'react-redux'
 import {Route} from 'react-router-dom'
 import {authActions, Login} from '../features/Auth'
 import {authSelectors} from "../features/Auth";
@@ -35,12 +35,12 @@ function App({demo = false}: PropsType) {
 
     useEffect(() => {
         if (!demo) {
-           initializeApp()
+            initializeApp()
         }
     }, [])
 
     const logoutHandler = useCallback(() => {
-      logout()
+        logout()
     }, [])
 
     if (!isInitialized) {

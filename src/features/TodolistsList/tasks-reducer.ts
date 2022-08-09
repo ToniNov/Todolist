@@ -20,13 +20,15 @@ export const fetchTasks =
     } catch (error: any) {
         return handleAsyncServerNetworkError(error, thunkAPI);
     }
-})
+});
+
 export const removeTask =
     createAsyncThunk<{ taskId: string, todolistId: string }, { taskId: string, todolistId: string }, ThunkError>
     ('tasks/removeTask', async (param, thunkAPI) => {
         const res = await todolistsAPI.deleteTask(param.todolistId, param.taskId);
         return {taskId: param.taskId, todolistId: param.todolistId};
-    })
+    });
+
 export const addTask =
     createAsyncThunk<TaskType, { title: string, todolistId: string }, ThunkError>
     ('tasks/addTask', async (param, thunkAPI) => {
@@ -44,6 +46,7 @@ export const addTask =
             return handleAsyncServerNetworkError(error, thunkAPI, false);
         }
     })
+
 export const updateTask =
     createAsyncThunk('tasks/updateTask',
         async (param: { taskId: string, model: UpdateDomainTaskModelType, todolistId: string }, thunkAPI) => {
@@ -66,7 +69,7 @@ export const updateTask =
     const res = await todolistsAPI.updateTask(param.todolistId, param.taskId, apiModel);
     try {
         if (res.data.resultCode === 0) {
-            return param
+            return param;
         } else {
             return handleAsyncServerAppError(res.data, thunkAPI);
         }
