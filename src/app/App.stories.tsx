@@ -1,17 +1,11 @@
 import React from 'react'
-import {action} from '@storybook/addon-actions'
 import App from './App'
-import {
-    HashRouterDecorator,
-    ReduxStoreProviderDecorator
-} from '../stories/decorators/ReduxStoreProviderDecorator'
-
-
+import {BrowserRouterDecorator, ReduxStoreProviderDecorator} from '../stories/decorators/ReduxStoreProviderDecorator'
 
 export default {
-    title: 'App Stories',
+    title: 'Application Stories',
     component: App,
-    decorators: [ReduxStoreProviderDecorator, HashRouterDecorator]
+    decorators: [ReduxStoreProviderDecorator, BrowserRouterDecorator]
 }
 
 export const AppBaseExample = (props: any) => {

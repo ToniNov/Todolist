@@ -1,28 +1,27 @@
 import React from 'react'
 import {Provider} from 'react-redux'
 import {combineReducers} from 'redux'
+import {tasksReducer} from '../../features/TodolistsList'
 import {todolistsReducer} from '../../features/TodolistsList'
 import {v1} from 'uuid'
+import {appReducer} from '../../features/Application'
 import thunkMiddleware from 'redux-thunk'
-import {authReducer} from "../../features/Auth";
-import {configureStore} from "@reduxjs/toolkit";
-import {HashRouter} from "react-router-dom";
-import {AppRootStateType, RootReducerType} from "../../utils/types";
-import {tasksReducer} from "../../features/TodolistsList";
-import {TaskPriorities, TaskStatuses} from "../../api/types";
-// исправить
-import {applicationReducer} from "../../features/Application/application-reducer";
+import {authReducer} from '../../features/Auth'
+import {configureStore} from '@reduxjs/toolkit'
+import {HashRouter} from 'react-router-dom'
+import {AppRootStateType, RootReducerType} from '../../utils/types'
+import {TaskPriorities, TaskStatuses} from '../../api/types'
 
 const rootReducer: RootReducerType = combineReducers({
     tasks: tasksReducer,
     todolists: todolistsReducer,
-    app: applicationReducer,
+    app: appReducer,
     auth: authReducer
-})
+});
 
 const initialGlobalState: AppRootStateType = {
     todolists: [
-        {id: "todolistId1", title: "What to learn", filter: "all", entityStatus: 'idle', addedDate: '', order: 0},
+        {id: "todolistId1", title: "What to learn What to learn What to learn What to learn", filter: "all", entityStatus: 'idle', addedDate: '', order: 0},
         {id: "todolistId2", title: "What to buy", filter: "all", entityStatus: 'loading', addedDate: '', order: 0}
     ] ,
     tasks: {
@@ -41,11 +40,11 @@ const initialGlobalState: AppRootStateType = {
     },
     app: {
         error: null,
-        status: 'idle',
-        isInitialized: false
+        status: 'succeeded',
+        isInitialized: true
     },
     auth: {
-        isLoggedIn: false
+        isLoggedIn: true
     }
 };
 
@@ -60,7 +59,7 @@ export const ReduxStoreProviderDecorator = (storyFn: any) => (
         store={storyBookStore}>{storyFn()}
     </Provider>)
 
-export const HashRouterDecorator = (storyFn: any) => (
-    <HashRouter>
-        {storyFn()}
+
+export const BrowserRouterDecorator = (storyFn: any) => (
+    <HashRouter>{storyFn()}
     </HashRouter>)
