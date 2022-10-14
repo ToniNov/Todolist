@@ -3,7 +3,7 @@ import axios from 'axios'
 const settings = {
     withCredentials: true,
     headers: {
-        'API-KEY': '1cdd9f77-c60e-4af5-b194-659e4ebd5d41'
+        'API-KEY': '8167777a-ea65-4ab7-8aca-994fc49b12df'
     }
 }
 const instance = axios.create({
@@ -53,20 +53,23 @@ export type LoginParamsType = {
 
 export const authAPI = {
     login(data: LoginParamsType) {
-        const promise = instance.post<ResponseType<{userId?: number}>>('auth/login', data);
-        return promise;
+        return instance.post<ResponseType<{userId?: number}>>('auth/login', data)
+        .then(res=> res.data)
     },
     logout() {
-        const promise = instance.delete<ResponseType<{userId?: number}>>('auth/login');
-        return promise;
+        return instance.delete<ResponseType<{userId?: number}>>('auth/login')
+            .then(res=> res.data)
     },
     me() {
-       const promise =  instance.get<ResponseType<{id: number; email: string; login: string}>>('auth/me');
-       return promise
+       return instance.get<ResponseType<{id: number; email: string; login: string}>>('auth/me')
+           .then(res=> res.data)
     }
 }
 
 // types
+
+export type MeResponseType = ResponseType<{id: number; email: string; login: string}>
+
 export type TodolistType = {
     id: string
     title: string

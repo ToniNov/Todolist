@@ -15,10 +15,11 @@ import {TodolistsList} from '../features/TodolistsList/TodolistsList'
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar'
 import {useDispatch, useSelector} from 'react-redux'
 import {AppRootStateType} from './store'
-import {initializeAppTC, RequestStatusType} from './app-reducer'
-import {BrowserRouter, Route} from 'react-router-dom'
+import {RequestStatusType} from './app-reducer'
+import { Route} from 'react-router-dom'
 import {Login} from '../features/Login/Login'
-import {logoutTC} from '../features/Login/auth-reducer'
+import {initializeAppSagaAC} from "./app-sagas";
+import {logoutSagaAC} from "../features/Login/auth-sagas";
 
 type PropsType = {
     demo?: boolean
@@ -31,11 +32,11 @@ function App({demo = false}: PropsType) {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(initializeAppTC())
+        dispatch(initializeAppSagaAC())
     }, [])
 
     const logoutHandler = useCallback(() => {
-        dispatch(logoutTC())
+        dispatch(logoutSagaAC())
     }, [])
 
     if (!isInitialized) {
@@ -46,7 +47,6 @@ function App({demo = false}: PropsType) {
     }
 
     return (
-        <BrowserRouter>
             <div className="App">
                 <ErrorSnackbar/>
                 <AppBar position="static">
@@ -66,7 +66,6 @@ function App({demo = false}: PropsType) {
                     <Route path={'/login'} render={() => <Login/>}/>
                 </Container>
             </div>
-        </BrowserRouter>
     )
 }
 
