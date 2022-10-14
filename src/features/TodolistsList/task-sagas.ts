@@ -18,7 +18,7 @@ export function* fetchTasksWorkerSaga(action: ReturnType<typeof fetchTasksSagaAC
 export const fetchTasksSagaAC = (todolistId: string) => ({type: 'TASK/FETCH-TASK-SAGA-AC', todolistId} as const)
 
 export function* removeTaskWorkerSaga(action: ReturnType<typeof removeTaskSagaAC>) {
-    const res: AxiosResponse<ResponseType> = yield call(todolistsAPI.deleteTask, action.todolistId, action.taskId)
+    const res: ResponseType = yield call(todolistsAPI.deleteTask, action.todolistId, action.taskId)
     yield put(removeTaskAC(action.taskId, action.todolistId))
 }
 
@@ -29,7 +29,7 @@ export const removeTaskSagaAC = (taskId: string, todolistId: string) => ({
 export function* addTaskWorkerSaga(action: ReturnType<typeof addTaskSagaAC>) {
     yield put(setAppStatusAC('loading'))
     try {
-        const data: ResponseType<{ item: TaskType }> = yield call(todolistsAPI.createTask, action.todolistId, action.title)
+        const data: ResponseType<{item: TaskType}> = yield call(todolistsAPI.createTask, action.todolistId, action.title)
         if (data.resultCode === 0) {
             const task = data.data.item
             yield put(addTaskAC(task))

@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, {AxiosResponse} from 'axios'
 
 const settings = {
     withCredentials: true,
@@ -13,34 +13,35 @@ const instance = axios.create({
 
 // api
 export const todolistsAPI = {
-    getTodolists() {
-        const promise = instance.get<TodolistType[]>('todo-lists');
-        return promise;
+    getTodolists(): Promise<TodolistType[]>{
+        return instance.get<TodolistType[]>('todo-lists')
+            .then(res => res.data)
     },
-    createTodolist(title: string) {
-        const promise = instance.post<ResponseType<{ item: TodolistType }>>('todo-lists', {title: title});
-        return promise;
+    createTodolist(title: string): Promise<ResponseType>  {
+       return  instance.post<ResponseType<{ item: TodolistType }>>('todo-lists', {title: title})
+            .then(res => res.data)
     },
-    deleteTodolist(id: string) {
-        const promise = instance.delete<ResponseType>(`todo-lists/${id}`);
-        return promise;
+    deleteTodolist(id: string): Promise<ResponseType>  {
+        return  instance.delete<ResponseType>(`todo-lists/${id}`)
+            .then(res => res.data)
     },
-    updateTodolist(id: string, title: string) {
-        const promise = instance.put<ResponseType>(`todo-lists/${id}`, {title: title});
-        return promise;
+    updateTodolist(id: string, title: string): Promise<ResponseType>  {
+        return instance.put<ResponseType>(`todo-lists/${id}`, {title: title})
+            .then(res => res.data)
     },
-    getTasks(todolistId: string) {
+    getTasks(todolistId: string): Promise<GetTasksResponse> {
         return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`)
             .then(res => res.data)
     },
-    deleteTask(todolistId: string, taskId: string) {
-        return instance.delete<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`);
+    deleteTask(todolistId: string, taskId: string): Promise<ResponseType> {
+        return instance.delete<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
+            .then(res => res.data)
     },
-    createTask(todolistId: string, taskTitile: string) {
+    createTask(todolistId: string, taskTitile: string): Promise<ResponseType<{ item: TaskType}>> {
         return instance.post<ResponseType<{ item: TaskType}>>(`todo-lists/${todolistId}/tasks`, {title: taskTitile})
             .then(res => res.data)
     },
-    updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
+    updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType): Promise<ResponseType<TaskType>> {
         return instance.put<ResponseType<TaskType>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
             .then(res => res.data)
     }
@@ -55,21 +56,23 @@ export type LoginParamsType = {
 }
 
 export const authAPI = {
-    login(data: LoginParamsType) {
-        return instance.post<ResponseType<{userId?: number}>>('auth/login', data)
+    login(data: LoginParamsType): Promise<LogInOutResponseType> {
+        return instance.post<LogInOutResponseType>('auth/login', data)
         .then(res=> res.data)
     },
-    logout() {
-        return instance.delete<ResponseType<{userId?: number}>>('auth/login')
+    logout(): Promise<LogInOutResponseType>{
+        return instance.delete<LogInOutResponseType>('auth/login')
             .then(res=> res.data)
     },
-    me() {
-       return instance.get<ResponseType<{id: number; email: string; login: string}>>('auth/me')
+    me(): Promise<MeResponseType> {
+       return instance.get<MeResponseType>('auth/me')
            .then(res=> res.data)
     }
 }
 
 // types
+
+export type LogInOutResponseType = ResponseType<{userId?: number}>
 
 export type MeResponseType = ResponseType<{id: number; email: string; login: string}>
 

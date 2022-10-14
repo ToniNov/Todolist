@@ -2,12 +2,8 @@ import React, {useCallback, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {AppRootStateType} from '../../app/store'
 import {
-    addTodolistTC,
     changeTodolistFilterAC,
-    changeTodolistTitleTC,
-    fetchTodolistsTC,
     FilterValuesType,
-    removeTodolistTC,
     TodolistDomainType
 } from './todolists-reducer'
 import { TasksStateType} from './tasks-reducer'
@@ -17,6 +13,12 @@ import {AddItemForm} from '../../components/AddItemForm/AddItemForm'
 import {Todolist} from './Todolist/Todolist'
 import { Redirect } from 'react-router-dom'
 import {addTaskSagaAC, removeTaskSagaAC, updateTaskSagaAC} from "./task-sagas";
+import {
+    addTodolistSagaAC, changeTodolistTitleSagaAC,
+    changeTodolistTitleWorkerSaga,
+    fetchTodolistsSagaAC,
+    removeTodolistSagaAC
+} from "./todolist-sagas";
 
 type PropsType = {
     demo?: boolean
@@ -33,8 +35,7 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
         if (demo || !isLoggedIn) {
             return;
         }
-        const thunk = fetchTodolistsTC()
-        dispatch(thunk)
+        dispatch(fetchTodolistsSagaAC())
     }, [])
 
     const removeTask = useCallback(function (id: string, todolistId: string) {
@@ -59,18 +60,16 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
     }, [])
 
     const removeTodolist = useCallback(function (id: string) {
-        const thunk = removeTodolistTC(id)
-        dispatch(thunk)
+        dispatch(removeTodolistSagaAC(id))
     }, [])
 
     const changeTodolistTitle = useCallback(function (id: string, title: string) {
-        const thunk = changeTodolistTitleTC(id, title)
-        dispatch(thunk)
+        dispatch(changeTodolistTitleSagaAC(id, title))
     }, [])
 
     const addTodolist = useCallback((title: string) => {
-        const thunk = addTodolistTC(title)
-        dispatch(thunk)
+        const action = addTodolistSagaAC(title)
+        dispatch(action)
     }, [dispatch])
 
     if (!isLoggedIn) {
