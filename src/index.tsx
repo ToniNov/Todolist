@@ -23,8 +23,8 @@ rerenderEntireTree()
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-if (process.env.NODE_ENV === 'development' && module.hot) {
-    module.hot.accept('./app/App'), () => {
-        rerenderEntireTree()
-    }
-}
+// if (process.env.NODE_ENV === 'development' && module.hot) {
+//     module.hot.accept('./app/App'), () => {
+//         rerenderEntireTree()
+//     }
+// }
