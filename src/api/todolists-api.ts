@@ -4,7 +4,8 @@ import {GetTasksResponse, LoginParamsType,ResponseTypeApi, TaskType, TodolistTyp
 const settings = {
     withCredentials: true,
     headers: {
-        'API-KEY': '8167777a-ea65-4ab7-8aca-994fc49b12df'
+        //'API-KEY': '8167777a-ea65-4ab7-8aca-994fc49b12df'
+        'API-KEY': process.env.REACT_APP_API_KEY,
     }
 }
 const instance = axios.create({
